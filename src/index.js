@@ -13,8 +13,7 @@ let app = new Vue({
       username: '',
       password: ''
     },
-    isLogined: false,
-    account: '',
+    currentUser: null,
     index: 0,
     newTodo: '',
     todoList: []
@@ -28,41 +27,41 @@ let app = new Vue({
     this.index = this.getStorage('index') || 0
     this.newTodo = this.getStorage('newTodo') || ''
     this.todoList = this.getStorage('todoList') || []
+    this.currentUser = this.getCurrentUser()
   },
   methods: {
     login: function () {
-      let app = this
-      AV.User.logIn(this.formData.username, this.formData.password).then(function (loginedUser) {
-        console.log(loginedUser)
-
-        app.isLogined = true
-        app.account = loginedUser.attributes.username
+      AV.User.logIn(this.formData.username, this.formData.password).then(loginedUser => {
+        this.currentUser = this.getCurrentUser()
       }, function (error) {
         console.log(error)
       });
     },
     signUp: function () {
-      let app = this
       let user = new AV.User();
       user.setUsername(this.formData.username);
       user.setPassword(this.formData.password);
       user
         .signUp()
-        .then(function (loginedUser) {
-          app.login()
+        .then(loginedUser => {
+          this.login()
         }, (function (error) {
           console.log(error)
         }));
     },
     logout: function(){
       AV.User.logOut()
-      this.isLogined = false
-      app.initInfo()
+      this.currentUser = null
+      window.location.reload()
     },
-    initInfo: function () {
-      this.formData.username = ''
-      this.formData.password = ''
-      this.actionType = 'login'
+    getCurrentUser: function(){
+      let current = AV.User.current()
+      if(current){
+        let {id, attributes: {username}, createdAt} = current
+        return {id, username, createdAt}
+      }else{
+        return null
+      }
     },
     addTodo: function () {
       this.newTodo === ''
