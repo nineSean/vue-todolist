@@ -10,25 +10,67 @@
     [v-cloak] {
       display: none;
     }
+
     .delete-line {
       text-decoration: line-through;
     }
+
   </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="newTask">
-      <input type="text" v-model="newTodo" @keypress.enter="addTodo">
-    </div>
-    <ol class="todos">
-      <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}" v-cloak>
-        <span>{{todo.content}}</span>
-        <span>{{todo.createdAt}}</span>
-        <input type="checkbox" v-model="todo.done">
-        <button @click="removeTodo(todo)">删除</button>
-      </li>
-    </ol>
+    <section class="header" v-if=isLogined >
+      <span v-cloak>欢迎 {{account}}</span>
+      <button @click=logout>登出</button>
+    </section>
+    <section id="loginAndSignUp" v-if=!isLogined>
+      <div>
+        <input type="radio" id="login" name="loginOrSignUp" v-model="actionType" value="login">
+        <label for="login">登入</label>
+        <input type="radio" id="signUp" name="loginOrSignUp" v-model="actionType" value="signUp">
+        <label for="signUp">注册</label>
+      </div>
+      <div class="login" v-if="actionType == 'login'">
+        <form @submit.prevent=login>
+          <div class="formRow">
+            账号 <input type="text" v-model=formData.username>
+          </div>
+          <div class="formRow">
+            密码 <input type="password" v-model=formData.password>
+          </div>
+          <div class="formAction">
+            <input type="submit" value="登入">
+          </div>
+        </form>
+      </div>
+      <div class="signUp" v-if="actionType == 'signUp'">
+        <form @submit.prevent=signUp>
+          <div class="form">
+            账号 <input type="text" v-model=formData.username>
+          </div>
+          <div class="form">
+            密码 <input type="password" v-model=formData.password>
+          </div>
+          <div class="formAction">
+            <input type="submit" value="注册">
+          </div>
+        </form>
+      </div>
+    </section>
+    <section id="todo" v-if=isLogined>
+      <div class="newTask">
+        <input type="text" v-model="newTodo" @keypress.enter="addTodo">
+      </div>
+      <ol class="todos">
+        <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}" v-cloak>
+          <span>{{todo.content}}</span>
+          <span>{{todo.createdAt}}</span>
+          <input type="checkbox" v-model="todo.done">
+          <button @click="removeTodo(todo)">删除</button>
+        </li>
+      </ol>
+    </section>
   </div>
   <script src="./dist/bundle.js"></script>
 </body>
