@@ -1,0 +1,24 @@
+{
+  "name": "vue-todolist",
+  "version": "1.0.0",
+  "description": "todo list with vue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "vue",
+    "todolist"
+  ],
+  "author": "nineSean",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "vue": "^2.5.17",
+    "webpack": "^4.19.0"
+  }
+}
