@@ -1,13 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Todo-list</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+    .delete-line {
+      text-decoration: line-through;
+    }
+  </style>
 </head>
+
 <body>
-  <h2>webpack test</h2>
+  <div id="app">
+    <div class="newTask">
+      <input type="text" v-model="newTodo" @keypress.enter="addTodo">
+    </div>
+    <ol class="todos">
+      <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}" v-cloak>
+        <span>{{todo.content}}</span>
+        <span>{{todo.createdAt}}</span>
+        <input type="checkbox" v-model="todo.done">
+        <button @click="removeTodo(todo)">删除</button>
+      </li>
+    </ol>
+  </div>
   <script src="./dist/bundle.js"></script>
 </body>
+
 </html>
