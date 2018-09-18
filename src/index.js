@@ -19,20 +19,19 @@ let app = new Vue({
     todoList: []
   },
   created: function () {
-    window.onbeforeunload = () => {
-      this.setStorage('newTodo')
-      this.setStorage('todoList')
-      this.setStorage('index')
-    }
-    this.index = this.getStorage('index') || 0
-    this.newTodo = this.getStorage('newTodo') || ''
-    this.todoList = this.getStorage('todoList') || []
     this.currentUser = this.getCurrentUser()
+    this.getTodos()
   },
+  // watch: {
+  //   todoList: function(){
+  //     this.saveOrUpdateTodos()
+  //   }
+  // }, // 当done变化时，不生效，改在checkbox上bind change event
   methods: {
     login: function () {
       AV.User.logIn(this.formData.username, this.formData.password).then(loginedUser => {
         this.currentUser = this.getCurrentUser()
+        this.getTodos()
       }, function (error) {
         console.log(error)
       });
@@ -63,6 +62,43 @@ let app = new Vue({
         return null
       }
     },
+    getTodos: function(){
+      if(!AV.User.current()) return
+      var query = new AV.Query('AllTodos');
+      query.find().then((todos) => {
+        let avAllTodos = todos[0]
+        this.todoList = JSON.parse(avAllTodos.attributes.content)
+        this.todoList.id = avAllTodos.id
+      }, function (error) {
+        console.log(error)
+      })
+    },
+    saveTodos: function(){
+      let dataString = JSON.stringify(this.todoList)
+      let AVTodos = AV.Object.extend('AllTodos')
+      let avTodos = new AVTodos()
+      let acl = new AV.ACL()
+      acl.setReadAccess(AV.User.current(), true)
+      acl.setWriteAccess(AV.User.current(), true)
+      avTodos.set('content', dataString)
+      avTodos.setACL(acl)
+      avTodos.save().then(todo => {
+        this.todoList.id = todo.id
+        console.log('保存成功')
+      }, error => {
+        console.log(error)
+      })
+    },
+    updateTodos: function(){
+      let todos = AV.Object.createWithoutData('AllTodos', this.todoList.id)
+      todos.set('content', JSON.stringify(this.todoList))
+      todos.save().then(() => {
+        console.log('更新成功')
+      })
+    },
+    saveOrUpdateTodos: function(){
+      this.todoList.id ? this.updateTodos() : this.saveTodos()
+    },
     addTodo: function () {
       this.newTodo === ''
         ? console.log('please type something')
@@ -75,6 +111,7 @@ let app = new Vue({
             content: this.newTodo
           })
       this.newTodo = ''
+      this.saveOrUpdateTodos()
     },
     removeTodo: function (todo) {
       let index = this
@@ -83,14 +120,7 @@ let app = new Vue({
       this
         .todoList
         .splice(index, 1)
-    },
-    setStorage: function (name) {
-      window
-        .localStorage
-        .setItem(name, JSON.stringify(this[name]))
-    },
-    getStorage: function (name) {
-      return JSON.parse(window.localStorage.getItem(name))
+      this.saveOrUpdateTodos()
     }
   }
 })

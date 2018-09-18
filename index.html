@@ -20,7 +20,7 @@
 
 <body>
   <div id="app">
-    <section id="loginAndSignUp" v-if=!currentUser>
+    <section id="loginAndSignUp" v-if=!currentUser v-cloak>
       <div>
         <input type="radio" id="login" name="loginOrSignUp" v-model="actionType" value="login">
         <label for="login">登入</label>
@@ -54,17 +54,17 @@
         </form>
       </div>
     </section>
-    <section id="todo" v-if=currentUser>
-        <span v-cloak>欢迎 {{currentUser.username}}</span>
+    <section id="todo" v-if=currentUser v-cloak>
+        <span>欢迎 {{currentUser.username}}</span>
         <button @click=logout>登出</button>
       <div class="newTask">
-        <input type="text" v-model="newTodo" @keypress.enter="addTodo">
+        <input type="text" v-model=newTodo @keypress.enter="addTodo">
       </div>
       <ol class="todos">
-        <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}" v-cloak>
+        <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}">
           <span>{{todo.content}}</span>
           <span>{{todo.createdAt}}</span>
-          <input type="checkbox" v-model="todo.done">
+          <input type="checkbox" v-model="todo.done" @change=saveOrUpdateTodos>
           <button @click="removeTodo(todo)">删除</button>
         </li>
       </ol>
