@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import AV from 'leancloud-storage'
+import './login.scss'
+import './todolist.scss'
 
 var APP_ID = 'mYh0wItrTJIa21cOI97cqHdN-gzGzoHsz';
 var APP_KEY = 'RvNjHyG3CLokYoLDRoXWvF3o';

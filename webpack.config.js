@@ -12,6 +12,26 @@ module.exports = {
         test:/\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/  // 排除掉node_modules，优化打包速度
+      },
+      {
+        test:/\.scss$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+          },
+          {
+            loader: 'postcss-loader'
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: ['./src/scss'],
+            },
+          },
+        ],
       }
     ]
   },
