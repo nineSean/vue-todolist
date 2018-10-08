@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hans">
 
 <head>
   <meta charset="UTF-8">
@@ -82,7 +82,9 @@
       <main class="todo-area">
         <div class="newTask">
           <input type="text" id="todo-input" v-model=newTodo @keypress.enter="addTodo" required>
-          <label for="todo-input">请输入待办事宜</label>
+          <label for="todo-input">
+            <p>请输入待办事宜   添加请按回车</p>
+          </label>
         </div>
         <ol class="todos">
           <li v-for="todo in todoList" :key="todo.key" :class="{'completed': todo.done}">

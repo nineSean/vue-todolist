@@ -62,18 +62,34 @@
           transform: translateX(70%);
           border-color: transparent;
           background-color: transparent;
+          >p{
+            left: -28%;
+            width: 55%;
+          }
         }
       }
       >label{
+        position: relative;
         display: block;
         width: 100%;
-        padding: 0 10px;
+        height: 44px;
         line-height: 44px;
+        padding: 0 10px;
         font-size: 20px;
         color: #fff;
         border-bottom: 2px solid #fff;
         transition: .5s;
         cursor: pointer;
+        overflow: hidden;
+        >p{
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 30%;
+          height: 40px;
+          white-space: pre-wrap;
+          overflow: hidden;
+        }
       }
     }
     >.todos{
