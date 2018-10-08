@@ -102,6 +102,9 @@
           >label{
             margin-left: 30px;
           }
+          >span:last-of-type{
+            width: 350px;
+          }
         }
         >span:first-of-type{
           float: right;
@@ -143,6 +146,9 @@
         }
         >span:last-of-type{
           position: absolute;
+          width: 360px;
+          height: 40px;
+          overflow: auto;
           letter-spacing: 1px;
         }
 
