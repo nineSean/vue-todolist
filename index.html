@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todo-list</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_862693_i1saciz062q.css">
   <style>
     /* reset */
     *{margin: 0;padding: 0;box-sizing: border-box;}
@@ -13,14 +14,15 @@
       font: 16px/1.5 sans-serif;
       color: #fff;
     }
+    ul,ol{
+      list-style: none;
+    }
 
     /* common */
     [v-cloak] {
       display: none;
     }
-    .delete-line {
-      text-decoration: line-through;
-    }
+
 
   </style>
 </head>
@@ -70,19 +72,29 @@
       <div class="back-layout"></div>
     </section>
     <section id="todo" v-if=currentUser>
-        <span>欢迎 {{currentUser.username}}</span>
+      <header>
         <button @click=logout>登出</button>
-      <div class="newTask">
-        <input type="text" v-model=newTodo @keypress.enter="addTodo">
-      </div>
-      <ol class="todos">
-        <li v-for="todo in todoList" :key="todo.key" :class="{'delete-line': todo.done}">
-          <span>{{todo.content}}</span>
-          <span>{{todo.createdAt}}</span>
-          <input type="checkbox" v-model="todo.done" @change=saveOrUpdateTodos>
-          <button @click="removeTodo(todo)">删除</button>
-        </li>
-      </ol>
+        <span>您好 {{currentUser.username}}</span>
+      </header>
+      <main class="todo-area">
+        <div class="newTask">
+          <input type="text" id="todo-input" v-model=newTodo @keypress.enter="addTodo" required>
+          <label for="todo-input">请输入待办事宜</label>
+        </div>
+        <ol class="todos">
+          <li v-for="todo in todoList" :key="todo.key" :class="{'completed': todo.done}">
+            <button @click="removeTodo(todo)">
+                <i class="iconfont icon-remove"></i>
+            </button>
+            <span>{{todo.createdAt}}</span>
+            <input :id=`isDone-${todo.key}` type="checkbox" v-model="todo.done" @change=saveOrUpdateTodos :class="{'active': todo.done}">
+            <label :for=`isDone-${todo.key}`>
+              <i class="iconfont icon-tick"></i>
+            </label>
+            <span>{{todo.content}}</span>
+          </li>
+        </ol>
+      </main>
     </section>
   </div>
   <script src="./dist/bundle.js"></script>
